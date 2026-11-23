@@ -371,8 +371,9 @@ function svcPage(k){
 
 /* form */
 var form=$('#form'),msg=$('#msg'),sendBtn=$('#send');
-function fail(){
- msg.innerHTML='That did not send. Please email us at <a href="mailto:'+EMAIL+'">'+EMAIL+'</a> instead.';
+function fail(d,m){
+ var body=encodeURIComponent('Name: '+d.name+'\nCompany: '+d.company+'\nEmail: '+d.email+'\nNeeds: '+d.service+'\nBudget: '+d.budget+'\n\nAbout the brand:\n'+d.brand);
+ msg.innerHTML='That did not send'+(m?' ('+String(m).replace(/</g,'')+')':'')+'. <a href="mailto:'+EMAIL+'?subject='+encodeURIComponent('Enquiry: '+d.name+' ('+d.service+')')+'&body='+body+'">Tap here to email us your details instead</a>.';
 }
 form.addEventListener('submit',function(e){
  e.preventDefault();msg.textContent='';
@@ -387,8 +388,8 @@ form.addEventListener('submit',function(e){
  .then(function(r){return r.json()})
  .then(function(j){
   if(j&&(j.success===true||j.success==='true')){form.style.display='none';$('#done').style.display='block'}
-  else{fail();sendBtn.disabled=false;sendBtn.textContent='Book Your Spot!'}
- }).catch(function(){fail();sendBtn.disabled=false;sendBtn.textContent='Book Your Spot!'});
+  else{fail(d,j&&j.message);sendBtn.disabled=false;sendBtn.textContent='Book Your Spot!'}
+ }).catch(function(){fail(d);sendBtn.disabled=false;sendBtn.textContent='Book Your Spot!'});
 });
 $$('.fld input,.fld select,.fld textarea',form).forEach(function(i){i.addEventListener('input',function(){i.closest('.fld').classList.remove('bad')})});
 
