@@ -407,6 +407,7 @@ var pending='';
 var home=$('#home'),page=$('#page');
 function route(){
  var h=location.hash||'#home';nav.classList.remove('open');
+ if(h==='#home'){try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}}
  var k=h.slice(1);
  if(SV[k]){home.hidden=true;page.hidden=false;page.innerHTML=svcPage(k);document.title=SV[k].svc+' | Talk Of The Town';window.scrollTo(0,0);var hh=$('#pgh');if(hh)hh.focus({preventScroll:true});return}
  page.hidden=true;page.innerHTML='';home.hidden=false;document.title='Talk Of The Town';
